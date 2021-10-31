@@ -12,7 +12,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("ren0130").password("ming6301").roles("ADMIN, USER");
+        auth.inMemoryAuthentication().withUser("ren0130").password("ming6301").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("user").password("user").roles("USER");
     }
 
     // TO TEST it, make sure every run, cookie must be deleted first!!!
@@ -29,7 +30,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/rest/auth/**").fullyAuthenticated().and().httpBasic();
+        http.authorizeRequests().antMatchers("/rest/auth/**")
+                .hasRole("USER")
+                .anyRequest()
+                .fullyAuthenticated().and().httpBasic();
     }
 
     // This passwordEncoder must be present! no matter it's NoOp, Standard, BCrypt, SCrypt.
