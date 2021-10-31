@@ -17,12 +17,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // TO TEST it, make sure every run, cookie must be deleted first!!!
     // ================================================================
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.csrf().disable();
+//        http.authorizeRequests()
+//                .anyRequest().fullyAuthenticated();
+//        http.formLogin().and().httpBasic();
+//    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests()
-                .anyRequest().fullyAuthenticated();
-        http.formLogin().and().httpBasic();
+        http.authorizeRequests().antMatchers("/rest/auth/**").fullyAuthenticated().and().httpBasic();
     }
 
     // This passwordEncoder must be present! no matter it's NoOp, Standard, BCrypt, SCrypt.
